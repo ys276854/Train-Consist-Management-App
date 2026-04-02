@@ -1,52 +1,90 @@
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 public class TrainConsistManagementApp {
 
-    // Goods Bogie class
-    static class GoodsBogie {
-        private String type;
-        private String cargo;
+    // Bogie class
+    static class Bogie {
+        String name;
+        int capacity;
 
-        public GoodsBogie(String type, String cargo) {
-            this.type = type;
-            this.cargo = cargo;
+        Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
         }
 
-        public String getType() {
-            return type;
+        public int getCapacity() {
+            return capacity;
         }
 
-        public String getCargo() {
-            return cargo;
+        @Override
+        public String toString() {
+            return name + " - Capacity: " + capacity;
         }
     }
 
-    // UC12 Safety Validation Method
-    public static boolean isTrainSafetyCompliant(List<GoodsBogie> bogies) {
+    // ===============================
+    // LOOP BASED FILTERING
+    // ===============================
+    public static List<Bogie> filterUsingLoop(List<Bogie> bogies) {
 
-        // Stream + allMatch + Lambda Expression
+        List<Bogie> result = new ArrayList<>();
+
+        for (Bogie b : bogies) {
+            if (b.getCapacity() > 60) {
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    // ===============================
+    // STREAM BASED FILTERING
+    // ===============================
+    public static List<Bogie> filterUsingStream(List<Bogie> bogies) {
+
         return bogies.stream()
-                .allMatch(bogie ->
-                        !bogie.getType().equalsIgnoreCase("Cylindrical")
-                                || bogie.getCargo().equalsIgnoreCase("Petroleum")
-                );
+                .filter(b -> b.getCapacity() > 60)
+                .collect(Collectors.toList());
     }
 
-    // Demo Main Method
+    // ===============================
+    // PERFORMANCE MEASUREMENT
+    // ===============================
+    public static long measureExecutionTime(Runnable task) {
+
+        long start = System.nanoTime();
+
+        task.run();
+
+        long end = System.nanoTime();
+
+        return end - start;
+    }
+
+    // ===============================
+    // MAIN METHOD (UC13 DEMO)
+    // ===============================
     public static void main(String[] args) {
 
-        List<GoodsBogie> bogies = new ArrayList<>();
+        System.out.println("=== UC13: Loop vs Stream Performance ===");
 
-        bogies.add(new GoodsBogie("Cylindrical", "Petroleum"));
-        bogies.add(new GoodsBogie("Open", "Coal"));
-        bogies.add(new GoodsBogie("Box", "Grain"));
+        List<Bogie> bogies = new ArrayList<>();
 
-        boolean safe = isTrainSafetyCompliant(bogies);
+        // Create sample dataset
+        for (int i = 1; i <= 10000; i++) {
+            bogies.add(new Bogie("Bogie-" + i, (i % 100)));
+        }
 
-        if (safe)
-            System.out.println("Train is SAFETY COMPLIANT ✅");
-        else
-            System.out.println("Train is NOT SAFE ❌");
+        // Loop timing
+        long loopTime = measureExecutionTime(() ->
+                filterUsingLoop(bogies));
+
+        // Stream timing
+        long streamTime = measureExecutionTime(() ->
+                filterUsingStream(bogies));
+
+        System.out.println("Loop Execution Time   : " + loopTime + " ns");
+        System.out.println("Stream Execution Time : " + streamTime + " ns");
     }
 }
