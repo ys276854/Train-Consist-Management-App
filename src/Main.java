@@ -1,44 +1,34 @@
-// TrainConsistAppUC4.java
+// TrainConsistAppUC5.java
 
-// Import required package
-import java.util.LinkedList;
+// Import required packages
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 // Main class
 public class Main {
 
-    // Entry point of program
+    // Entry point of the program
     public static void main(String[] args) {
 
-        // Step 1: Welcome Message
+        // Step 1: Welcome message
         System.out.println("=== Train Consist Management App ===");
 
-        // Step 2: Create LinkedList for Train Consist
-        LinkedList<String> trainConsist = new LinkedList<>();
+        // Step 2: Create LinkedHashSet for train formation
+        Set<String> trainFormation = new LinkedHashSet<>();
 
-        // Step 3: Add Bogies
-        trainConsist.add("Engine");
-        trainConsist.add("Sleeper");
-        trainConsist.add("AC");
-        trainConsist.add("Cargo");
-        trainConsist.add("Guard");
+        // Step 3: Add bogies
+        trainFormation.add("Engine");
+        trainFormation.add("Sleeper");
+        trainFormation.add("Cargo");
+        trainFormation.add("Guard");
 
-        System.out.println("\nInitial Train Consist:");
-        System.out.println(trainConsist);
+        // Step 4: Attempt duplicate insertion
+        trainFormation.add("Sleeper"); // duplicate (ignored automatically)
 
-        // Step 4: Insert Pantry Car at position 2 (index starts from 0)
-        trainConsist.add(2, "Pantry Car");
+        // Step 5: Display final formation
+        System.out.println("\nFinal Train Formation:");
+        System.out.println(trainFormation);
 
-        System.out.println("\nAfter adding Pantry Car at position 2:");
-        System.out.println(trainConsist);
-
-        // Step 5: Remove first and last bogie
-        trainConsist.removeFirst();
-        trainConsist.removeLast();
-
-        // Step 6: Display final ordered consist
-        System.out.println("\nFinal Ordered Train Consist:");
-        System.out.println(trainConsist);
-
-        System.out.println("\nTrain arrangement maintained successfully.");
+        System.out.println("\nDuplicates automatically prevented.");
     }
 }
