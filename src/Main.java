@@ -1,7 +1,7 @@
 import java.util.*;
 import java.util.stream.Collectors;
 
-// Bogie class
+// Bogie Class
 class Bogie {
     String name;
     int capacity;
@@ -12,6 +12,11 @@ class Bogie {
         this.capacity = capacity;
     }
 
+    // Getter for grouping
+    public String getName() {
+        return name;
+    }
+
     // Display method
     @Override
     public String toString() {
@@ -19,30 +24,37 @@ class Bogie {
     }
 }
 
-// Main class
+// Main Application
 public class Main {
 
     public static void main(String[] args) {
 
-        System.out.println("=== Train Consist Management App : UC8 ===");
+        System.out.println("=== Train Consist Management App : UC9 ===");
 
-        // Create bogie list
+        // Create Bogie List
         List<Bogie> bogies = new ArrayList<>();
 
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 56));
         bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("Sleeper", 72));   // duplicate type for grouping demo
+        bogies.add(new Bogie("AC Chair", 56));
 
+        // Display original list
         System.out.println("\nAll Bogies:");
         bogies.forEach(System.out::println);
 
-        // Stream filtering (capacity > 60)
-        List<Bogie> filteredBogies =
+        // Grouping using Stream API
+        Map<String, List<Bogie>> groupedBogies =
                 bogies.stream()
-                        .filter(b -> b.capacity > 60)
-                        .collect(Collectors.toList());
+                        .collect(Collectors.groupingBy(Bogie::getName));
 
-        System.out.println("\nFiltered Bogies (Capacity > 60):");
-        filteredBogies.forEach(System.out::println);
+        // Display grouped result
+        System.out.println("\nGrouped Bogies:");
+
+        groupedBogies.forEach((type, list) -> {
+            System.out.println("\n" + type + ":");
+            list.forEach(System.out::println);
+        });
     }
 }
