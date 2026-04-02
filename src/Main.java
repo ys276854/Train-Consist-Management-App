@@ -1,7 +1,8 @@
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-// Bogie Class
+
+// Bogie Class (same as UC7–UC9)
 class Bogie {
     String name;
     int capacity;
@@ -12,11 +13,6 @@ class Bogie {
         this.capacity = capacity;
     }
 
-    // Getter for grouping
-    public String getName() {
-        return name;
-    }
-
     // Display method
     @Override
     public String toString() {
@@ -24,37 +20,31 @@ class Bogie {
     }
 }
 
+
 // Main Application
-public class Main {
+public class Main{
 
     public static void main(String[] args) {
 
-        System.out.println("=== Train Consist Management App : UC9 ===");
+        System.out.println("=== Train Consist Management App : UC10 ===");
 
-        // Create Bogie List
+        // Create bogie list
         List<Bogie> bogies = new ArrayList<>();
 
         bogies.add(new Bogie("Sleeper", 72));
         bogies.add(new Bogie("AC Chair", 56));
         bogies.add(new Bogie("First Class", 24));
-        bogies.add(new Bogie("Sleeper", 72));   // duplicate type for grouping demo
-        bogies.add(new Bogie("AC Chair", 56));
 
-        // Display original list
-        System.out.println("\nAll Bogies:");
+        // Display bogies
+        System.out.println("\nTrain Bogies:");
         bogies.forEach(System.out::println);
 
-        // Grouping using Stream API
-        Map<String, List<Bogie>> groupedBogies =
-                bogies.stream()
-                        .collect(Collectors.groupingBy(Bogie::getName));
+        // ✅ Stream Aggregation using reduce()
+        int totalSeats = bogies.stream()
+                .map(b -> b.capacity)      // extract capacity
+                .reduce(0, Integer::sum); // aggregate
 
-        // Display grouped result
-        System.out.println("\nGrouped Bogies:");
-
-        groupedBogies.forEach((type, list) -> {
-            System.out.println("\n" + type + ":");
-            list.forEach(System.out::println);
-        });
+        // Display result
+        System.out.println("\nTotal Seating Capacity: " + totalSeats);
     }
 }
