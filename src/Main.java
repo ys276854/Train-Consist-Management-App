@@ -1,38 +1,52 @@
-// TrainConsistAppUC6.java
+// TrainConsistAppUC7.java
 
-// Import required packages
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
-// Main class
+// Bogie class (Custom Object)
+class Bogie {
+
+    String name;
+    int capacity;
+
+    // Constructor
+    Bogie(String name, int capacity) {
+        this.name = name;
+        this.capacity = capacity;
+    }
+
+    // Display method
+    public String toString() {
+        return name + " -> Capacity: " + capacity;
+    }
+}
+
+// Main Application Class
 public class Main {
 
-    // Entry point of program
     public static void main(String[] args) {
 
-        // Step 1: Welcome message
         System.out.println("=== Train Consist Management App ===");
 
-        // Step 2: Create HashMap (Bogie -> Capacity)
-        HashMap<String, Integer> bogieCapacity = new HashMap<>();
+        // Step 1: Create List of Bogies
+        List<Bogie> bogies = new ArrayList<>();
 
-        // Step 3: Insert bogie capacity details
-        bogieCapacity.put("Sleeper", 72);
-        bogieCapacity.put("AC Chair", 60);
-        bogieCapacity.put("First Class", 24);
+        // Step 2: Add passenger bogies
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
 
-        // Step 4: Display capacity details
-        System.out.println("\nBogie Capacity Details:");
+        // Step 3: Sort using Comparator (by capacity)
+        bogies.sort(Comparator.comparingInt(b -> b.capacity));
 
-        // Iterating using entrySet()
-        for (Map.Entry<String, Integer> entry : bogieCapacity.entrySet()) {
+        // Step 4: Display sorted bogies
+        System.out.println("\nBogies Sorted by Capacity:");
 
-            String bogie = entry.getKey();
-            int capacity = entry.getValue();
-
-            System.out.println(bogie + " -> Capacity: " + capacity);
+        for (Bogie b : bogies) {
+            System.out.println(b);
         }
 
-        System.out.println("\nCapacity mapping completed successfully.");
+        System.out.println("\nSorting completed successfully.");
     }
 }
