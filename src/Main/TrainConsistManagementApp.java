@@ -1,90 +1,61 @@
-import java.util.*;
+package app; // replace with your package or remove if none
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class TrainConsistManagementApp {
 
-    // Bogie class
-    static class Bogie {
-        String name;
-        int capacity;
+    // PassengerBogie class for UC13 testing
+    public static class PassengerBogie {
+        private String type;
+        private int capacity;
 
-        Bogie(String name, int capacity) {
-            this.name = name;
+        public PassengerBogie(String type, int capacity) {
+            this.type = type;
             this.capacity = capacity;
         }
 
-        public int getCapacity() {
-            return capacity;
-        }
-
-        @Override
-        public String toString() {
-            return name + " - Capacity: " + capacity;
-        }
+        public String getType() { return type; }
+        public int getCapacity() { return capacity; }
     }
 
-    // ===============================
-    // LOOP BASED FILTERING
-    // ===============================
-    public static List<Bogie> filterUsingLoop(List<Bogie> bogies) {
-
-        List<Bogie> result = new ArrayList<>();
-
-        for (Bogie b : bogies) {
-            if (b.getCapacity() > 60) {
-                result.add(b);
+    // Loop-based filtering
+    public static List<PassengerBogie> filterBogiesWithLoop(List<PassengerBogie> bogies, int minCapacity) {
+        List<PassengerBogie> result = new ArrayList<>();
+        for (PassengerBogie bogie : bogies) {
+            if (bogie.getCapacity() > minCapacity) {
+                result.add(bogie);
             }
         }
         return result;
     }
 
-    // ===============================
-    // STREAM BASED FILTERING
-    // ===============================
-    public static List<Bogie> filterUsingStream(List<Bogie> bogies) {
-
+    // Stream-based filtering
+    public static List<PassengerBogie> filterBogiesWithStream(List<PassengerBogie> bogies, int minCapacity) {
         return bogies.stream()
-                .filter(b -> b.getCapacity() > 60)
+                .filter(b -> b.getCapacity() > minCapacity)
                 .collect(Collectors.toList());
     }
 
-    // ===============================
-    // PERFORMANCE MEASUREMENT
-    // ===============================
-    public static long measureExecutionTime(Runnable task) {
-
-        long start = System.nanoTime();
-
-        task.run();
-
-        long end = System.nanoTime();
-
-        return end - start;
-    }
-
-    // ===============================
-    // MAIN METHOD (UC13 DEMO)
-    // ===============================
+    // Main method to benchmark
     public static void main(String[] args) {
-
-        System.out.println("=== UC13: Loop vs Stream Performance ===");
-
-        List<Bogie> bogies = new ArrayList<>();
-
-        // Create sample dataset
-        for (int i = 1; i <= 10000; i++) {
-            bogies.add(new Bogie("Bogie-" + i, (i % 100)));
+        // Example dataset
+        List<PassengerBogie> bogies = new ArrayList<>();
+        for (int i = 1; i <= 1000; i++) {
+            bogies.add(new PassengerBogie("Sleeper", i % 100));
         }
 
-        // Loop timing
-        long loopTime = measureExecutionTime(() ->
-                filterUsingLoop(bogies));
+        // Loop-based
+        long startLoop = System.nanoTime();
+        List<PassengerBogie> loopFiltered = filterBogiesWithLoop(bogies, 60);
+        long endLoop = System.nanoTime();
+        System.out.println("Loop filtering count: " + loopFiltered.size() + ", Time: " + (endLoop - startLoop) + " ns");
 
-        // Stream timing
-        long streamTime = measureExecutionTime(() ->
-                filterUsingStream(bogies));
-
-        System.out.println("Loop Execution Time   : " + loopTime + " ns");
-        System.out.println("Stream Execution Time : " + streamTime + " ns");
+        // Stream-based
+        long startStream = System.nanoTime();
+        List<PassengerBogie> streamFiltered = filterBogiesWithStream(bogies, 60);
+        long endStream = System.nanoTime();
+        System.out.println("Stream filtering count: " + streamFiltered.size() + ", Time: " + (endStream - startStream) + " ns");
     }
 }

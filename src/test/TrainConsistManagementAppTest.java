@@ -1,79 +1,67 @@
+package test; // must match main class package
+
+import app.TrainConsistManagementApp;
 import org.junit.jupiter.api.Test;
-import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TrainConsistManagementAppTest {
+class TrainConsistManagementAppTest {
 
-    private List<TrainConsistManagementApp.Bogie> createSampleBogies() {
-
-        return List.of(
-                new TrainConsistManagementApp.Bogie("Sleeper", 72),
-                new TrainConsistManagementApp.Bogie("AC Chair", 56),
-                new TrainConsistManagementApp.Bogie("First Class", 24),
-                new TrainConsistManagementApp.Bogie("Luxury", 80)
-        );
-    }
-
-    // ✅ Loop filtering test
     @Test
     void testLoopFilteringLogic() {
-
-        var result = TrainConsistManagementApp
-                .filterUsingLoop(createSampleBogies());
-
-        assertEquals(2, result.size());
+        List<TrainConsistManagementApp.PassengerBogie> bogies = List.of(
+                new TrainConsistManagementApp.PassengerBogie("Sleeper", 50),
+                new TrainConsistManagementApp.PassengerBogie("AC Chair", 70),
+                new TrainConsistManagementApp.PassengerBogie("First Class", 80)
+        );
+        List<TrainConsistManagementApp.PassengerBogie> filtered = TrainConsistManagementApp.filterBogiesWithLoop(bogies, 60);
+        assertEquals(2, filtered.size());
     }
 
-    // ✅ Stream filtering test
     @Test
     void testStreamFilteringLogic() {
-
-        var result = TrainConsistManagementApp
-                .filterUsingStream(createSampleBogies());
-
-        assertEquals(2, result.size());
+        List<TrainConsistManagementApp.PassengerBogie> bogies = List.of(
+                new TrainConsistManagementApp.PassengerBogie("Sleeper", 50),
+                new TrainConsistManagementApp.PassengerBogie("AC Chair", 70),
+                new TrainConsistManagementApp.PassengerBogie("First Class", 80)
+        );
+        List<TrainConsistManagementApp.PassengerBogie> filtered = TrainConsistManagementApp.filterBogiesWithStream(bogies, 60);
+        assertEquals(2, filtered.size());
     }
 
-    // ✅ Results must match
     @Test
     void testLoopAndStreamResultsMatch() {
-
-        var loopResult = TrainConsistManagementApp
-                .filterUsingLoop(createSampleBogies());
-
-        var streamResult = TrainConsistManagementApp
-                .filterUsingStream(createSampleBogies());
-
+        List<TrainConsistManagementApp.PassengerBogie> bogies = new ArrayList<>();
+        for (int i = 1; i <= 100; i++) {
+            bogies.add(new TrainConsistManagementApp.PassengerBogie("Sleeper", i));
+        }
+        List<TrainConsistManagementApp.PassengerBogie> loopResult = TrainConsistManagementApp.filterBogiesWithLoop(bogies, 60);
+        List<TrainConsistManagementApp.PassengerBogie> streamResult = TrainConsistManagementApp.filterBogiesWithStream(bogies, 60);
         assertEquals(loopResult.size(), streamResult.size());
     }
 
-    // ✅ Execution time check
     @Test
     void testExecutionTimeMeasurement() {
-
-        long time = TrainConsistManagementApp
-                .measureExecutionTime(() -> {
-                    int sum = 0;
-                    for (int i = 0; i < 1000; i++)
-                        sum += i;
-                });
-
-        assertTrue(time > 0);
-    }
-
-    // ✅ Large dataset test
-    @Test
-    void testLargeDatasetProcessing() {
-
-        List<TrainConsistManagementApp.Bogie> bigList = new ArrayList<>();
-
-        for (int i = 0; i < 5000; i++) {
-            bigList.add(new TrainConsistManagementApp.Bogie("B" + i, i % 100));
+        List<TrainConsistManagementApp.PassengerBogie> bogies = new ArrayList<>();
+        for (int i = 1; i <= 1000; i++) {
+            bogies.add(new TrainConsistManagementApp.PassengerBogie("AC Chair", i % 100));
         }
 
-        var result = TrainConsistManagementApp.filterUsingStream(bigList);
+        long start = System.nanoTime();
+        TrainConsistManagementApp.filterBogiesWithLoop(bogies, 60);
+        long end = System.nanoTime();
+        assertTrue((end - start) > 0);
+    }
 
-        assertNotNull(result);
+    @Test
+    void testLargeDatasetProcessing() {
+        List<TrainConsistManagementApp.PassengerBogie> bogies = new ArrayList<>();
+        for (int i = 1; i <= 100_000; i++) {
+            bogies.add(new TrainConsistManagementApp.PassengerBogie("Sleeper", i % 100));
+        }
+
+        List<TrainConsistManagementApp.PassengerBogie> filtered = TrainConsistManagementApp.filterBogiesWithStream(bogies, 60);
+        assertFalse(filtered.isEmpty());
     }
 }
