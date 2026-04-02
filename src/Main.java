@@ -1,33 +1,44 @@
-// TrainConsistAppUC3.java
+// TrainConsistAppUC4.java
 
-// Import required packages
-import java.util.HashSet;
-import java.util.Set;
+// Import required package
+import java.util.LinkedList;
 
 // Main class
 public class Main {
 
-    // Program entry point
+    // Entry point of program
     public static void main(String[] args) {
 
         // Step 1: Welcome Message
         System.out.println("=== Train Consist Management App ===");
 
-        // Step 2: Create HashSet for Bogie IDs
-        Set<String> bogieIDs = new HashSet<>();
+        // Step 2: Create LinkedList for Train Consist
+        LinkedList<String> trainConsist = new LinkedList<>();
 
-        // Step 3: Add Bogie IDs (including duplicates intentionally)
-        bogieIDs.add("BG101");
-        bogieIDs.add("BG102");
-        bogieIDs.add("BG103");
-        bogieIDs.add("BG101"); // Duplicate
-        bogieIDs.add("BG102"); // Duplicate
+        // Step 3: Add Bogies
+        trainConsist.add("Engine");
+        trainConsist.add("Sleeper");
+        trainConsist.add("AC");
+        trainConsist.add("Cargo");
+        trainConsist.add("Guard");
 
-        // Step 4: Display Unique Bogie IDs
-        System.out.println("\nUnique Bogie IDs in Train:");
-        System.out.println(bogieIDs);
+        System.out.println("\nInitial Train Consist:");
+        System.out.println(trainConsist);
 
-        // Program continues
-        System.out.println("\nDuplicate IDs automatically ignored.");
+        // Step 4: Insert Pantry Car at position 2 (index starts from 0)
+        trainConsist.add(2, "Pantry Car");
+
+        System.out.println("\nAfter adding Pantry Car at position 2:");
+        System.out.println(trainConsist);
+
+        // Step 5: Remove first and last bogie
+        trainConsist.removeFirst();
+        trainConsist.removeLast();
+
+        // Step 6: Display final ordered consist
+        System.out.println("\nFinal Ordered Train Consist:");
+        System.out.println(trainConsist);
+
+        System.out.println("\nTrain arrangement maintained successfully.");
     }
 }
